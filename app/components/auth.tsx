@@ -9,6 +9,7 @@ import Locale from "../locales";
 import BotIcon from "../icons/bot.svg";
 import { useEffect } from "react";
 import { getClientConfig } from "../config/client";
+import { showToast } from "./ui-lib";
 
 export function AuthPage() {
   const navigate = useNavigate();
@@ -71,15 +72,21 @@ export function AuthPage() {
         <IconButton
           text={Locale.Auth.Confirm}
           type="primary"
-          onClick={goChat}
+          // onClick={goChat}
+          onClick={() => {
+            if (accessStore.accessCode.length == 0) {
+              return showToast("密码不能为空");
+            }
+            goHome();
+          }}
         />
-        <IconButton
+        {/* <IconButton
           text={Locale.Auth.Later}
           onClick={() => {
             resetAccessCode();
             goHome();
           }}
-        />
+        /> */}
       </div>
     </div>
   );
