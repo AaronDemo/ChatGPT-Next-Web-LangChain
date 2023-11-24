@@ -524,7 +524,7 @@ export function ChatActions(props: {
           icon={<RobotIcon />}
         /> */}
 
-        {/* {config.pluginConfig.enable &&
+        {config.pluginConfig.enable &&
           /^gpt(?!.*03\d{2}$).*$/.test(currentModel) && (
             <ChatAction
               onClick={switchUsePlugins}
@@ -535,7 +535,7 @@ export function ChatActions(props: {
               }
               icon={usePlugins ? <EnablePluginIcon /> : <DisablePluginIcon />}
             />
-          )} */}
+          )}
 
         {showModelSelector && (
           <Selector

@@ -39,18 +39,28 @@ export function auth(req: NextRequest) {
   console.log("[User IP] ", getIP(req));
   console.log("[Time] ", new Date().toLocaleString());
 
-  if (serverConfig.needCode && !serverConfig.codes.has(hashedCode) && !apiKey) {
-    return {
-      error: true,
-      msg: !accessCode ? "empty access code" : "wrong access code",
-    };
-  }
+  let ua = req.headers.get("user-agent")?.toLocaleLowerCase() || "";
+  // 检查用户代理字符串ua是否包含企业微信浏览器的标识符
+  const isWxWork = /wxwork/.test(ua || "");
+  if (!isWxWork) {
+    //非企业微信环境，验证密码
+    if (
+      serverConfig.needCode &&
+      !serverConfig.codes.has(hashedCode) &&
+      !apiKey
+    ) {
+      return {
+        error: true,
+        msg: !accessCode ? "empty access code" : "wrong access code",
+      };
+    }
 
-  if (serverConfig.hideUserApiKey && !!apiKey) {
-    return {
-      error: true,
-      msg: "you are not allowed to access openai with your own api key",
-    };
+    if (serverConfig.hideUserApiKey && !!apiKey) {
+      return {
+        error: true,
+        msg: "you are not allowed to access openai with your own api key",
+      };
+    }
   }
 
   // if user does not provide an api key, inject system api key
