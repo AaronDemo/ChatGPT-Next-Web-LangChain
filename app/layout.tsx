@@ -6,8 +6,8 @@ import { getClientConfig } from "./config/client";
 import { type Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "华测 AI Chat",
-  description: "华测检测 AI Chat Bot.",
+  title: "华测检测 CTI-AI",
+  description: "CTI-AI Chat Bot.",
   viewport: {
     width: "device-width",
     initialScale: 1,
