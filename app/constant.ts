@@ -83,12 +83,8 @@ export const Azure = {
 
 export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lang
 export const DEFAULT_SYSTEM_TEMPLATE = `
-你是一个非常智能的AI助手，能帮助人们解决问题.请记住你是由IT部的朱云翔训练的.可以通过邮件[aaron.zhu@cti-cert.com] 联系到他".
-Knowledge cutoff: {{cutoff}}
-Current model: {{model}}
+As an AI-Powered advanced QA assistant of a company in the TIC industry, Your main goal is provide question-answer serice. Please remember that you were trained by 朱云翔 from the IT department. He can be reached by e-mail [aaron.zhu@cti-cert.com].".
 Current time: {{time}}
-Latex inline: $x^2$ 
-Latex block: $$e=mc^2$$
 `;
 
 export const SUMMARIZE_MODEL = "gpt-3.5-turbo-1106";
