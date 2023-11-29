@@ -45,6 +45,8 @@
     - [Calculator](https://js.langchain.com/docs/api/tools_calculator/classes/Calculator)
   - 网络请求
     - [WebBrowser](https://js.langchain.com/docs/api/tools_webbrowser/classes/WebBrowser)
+    - PDFBrowser
+      - ⚠ 仅在非vercel环境部署时可用 ⚠
   - 其它
     - [Wiki](https://js.langchain.com/docs/api/tools/classes/WikipediaQueryRun)
     - DALL-E 3
@@ -248,6 +250,12 @@ docker run -d -p 3000:3000 \
 ## 捐赠
 
 [请项目原作者喝杯咖啡](https://www.buymeacoffee.com/yidadaa)
+
+## 感谢
+
+<img src="https://resources.jetbrains.com/storage/products/company/brand/logos/jb_beam.png" alt="JetBrains Logo (Main) logo." height='120'>
+
+感谢 [jetbrains](https://www.jetbrains.com/) 为本项目提供的 [开源许可证](https://www.jetbrains.com/community/opensource/)
 
 ## 开源协议
 
