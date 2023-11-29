@@ -216,11 +216,15 @@ export function SideBar(props: { className?: string }) {
               <IconButton icon={<SettingsIcon />} shadow />
             </Link>
           </div>
-          {/* <div className={styles["sidebar-action"]}>
-            <a href={REPO_URL} target="_blank" rel="noopener noreferrer">
-              <IconButton icon={<GithubIcon />} shadow />
-            </a>
-          </div> */}
+          <div className={styles["sidebar-action"]}>
+            <IconButton
+              icon={<GithubIcon />}
+              text="问题反馈"
+              onClick={() => {
+                showToast("请联系邮箱：aaron.zhu@cti-cert.com");
+              }}
+            />
+          </div>
         </div>
         <div>
           <IconButton

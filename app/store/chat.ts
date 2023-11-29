@@ -1,5 +1,5 @@
 import { trimTopic } from "../utils";
-
+import { Logger } from "../utils/logger";
 import Locale, { getLang } from "../locales";
 import { showToast } from "../components/ui-lib";
 import { ModelConfig, ModelType, useAppConfig } from "./config";
@@ -280,7 +280,7 @@ export const useChatStore = createPersistStore(
 
         const userContent = fillTemplateWith(content, modelConfig);
         console.log("[User Input] after template: ", userContent);
-
+        // Logger.info("[User Input] after template: " + userContent);
         const userMessage: ChatMessage = createMessage({
           role: "user",
           content: userContent,
