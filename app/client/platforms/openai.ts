@@ -74,10 +74,39 @@ export class ChatGPTApi implements LLMApi {
   }
 
   async chat(options: ChatOptions) {
-    const messages = options.messages.map((v) => ({
-      role: v.role,
-      content: v.content,
-    }));
+    const messages: any[] = [];
+    for (const v of options.messages) {
+      let message: {
+        role: string;
+        content: { type: string; text?: string; image_url?: { url: string } }[];
+      } = {
+        role: v.role,
+        content: [],
+      };
+      message.content.push({
+        type: "text",
+        text: v.content,
+      });
+      if (v.image_url) {
+        await fetch(v.image_url)
+          .then((response) => response.arrayBuffer())
+          .then((buffer) => {
+            const base64Data = btoa(
+              String.fromCharCode(...new Uint8Array(buffer)),
+            );
+            message.content.push({
+              type: "image_url",
+              image_url: {
+                url: `data:image/jpeg;base64,${base64Data}`,
+              },
+            });
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      }
+      messages.push(message);
+    }
 
     const modelConfig = {
       ...useAppConfig.getState().modelConfig,
@@ -86,7 +115,6 @@ export class ChatGPTApi implements LLMApi {
         model: options.config.model,
       },
     };
-
     const requestPayload = {
       messages,
       stream: options.config.stream,
@@ -95,6 +123,10 @@ export class ChatGPTApi implements LLMApi {
       presence_penalty: modelConfig.presence_penalty,
       frequency_penalty: modelConfig.frequency_penalty,
       top_p: modelConfig.top_p,
+      max_tokens:
+        modelConfig.model == "gpt-4-vision-preview"
+          ? modelConfig.max_tokens
+          : null,
       // max_tokens: Math.max(modelConfig.max_tokens, 1024),
       // Please do not ask me why not send max_tokens, no reason, this param is just shit, I dont want to explain anymore.
     };
@@ -122,17 +154,39 @@ export class ChatGPTApi implements LLMApi {
 
       if (shouldStream) {
         let responseText = "";
+        let remainText = "";
         let finished = false;
+
+        // animate response to make it looks smooth
+        function animateResponseText() {
+          if (finished || controller.signal.aborted) {
+            responseText += remainText;
+            console.log("[Response Animation] finished");
+            return;
+          }
+
+          if (remainText.length > 0) {
+            const fetchCount = Math.max(1, Math.round(remainText.length / 60));
+            const fetchText = remainText.slice(0, fetchCount);
+            responseText += fetchText;
+            remainText = remainText.slice(fetchCount);
+            options.onUpdate?.(responseText, fetchText);
+          }
+
+          requestAnimationFrame(animateResponseText);
+        }
+
+        // start animaion
+        animateResponseText();
 
         const finish = () => {
           if (!finished) {
-            options.onFinish(responseText);
             finished = true;
+            options.onFinish(responseText + remainText);
           }
         };
 
         controller.signal.onabort = finish;
-
         fetchEventSource(chatPath, {
           ...chatPayload,
           async onopen(res) {
@@ -190,8 +244,7 @@ export class ChatGPTApi implements LLMApi {
               };
               const delta = json.choices[0]?.delta?.content;
               if (delta) {
-                responseText += delta;
-                options.onUpdate?.(responseText, delta);
+                remainText += delta;
               }
             } catch (e) {
               console.error("[Request] parse error", text);
