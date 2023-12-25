@@ -82,6 +82,6 @@ export const CN_PLUGINS: BuiltinPlugin[] = [
     builtin: true,
     createdAt: 1700907315000,
     enable: false,
-    onlyNodeRuntime: true,
+    onlyNodeRuntime: false,
   },
 ];

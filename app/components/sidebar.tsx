@@ -1,4 +1,4 @@
-import { useEffect, useRef, useMemo } from "react";
+import { useEffect, useRef, useMemo, useState } from "react";
 
 import styles from "./home.module.scss";
 
@@ -24,12 +24,21 @@ import {
   NARROW_SIDEBAR_WIDTH,
   Path,
   REPO_URL,
+  STORAGE_KEY,
 } from "../constant";
 
 import { Link, useNavigate } from "react-router-dom";
 import { isIOS, useMobileScreen } from "../utils";
 import dynamic from "next/dynamic";
-import { showConfirm, showToast } from "./ui-lib";
+import {
+  List,
+  ListItem,
+  Modal,
+  PasswordInput,
+  showConfirm,
+  showToast,
+} from "./ui-lib";
+import { ProviderType } from "../utils/cloud";
 
 const ChatList = dynamic(async () => (await import("./chat-list")).ChatList, {
   loading: () => null,
@@ -140,7 +149,7 @@ export function SideBar(props: { className?: string }) {
     () => isIOS() && isMobileScreen,
     [isMobileScreen],
   );
-
+  const [showReportModal, setShowReportModal] = useState(false);
   useHotKey();
 
   return (
@@ -221,7 +230,8 @@ export function SideBar(props: { className?: string }) {
               icon={<GithubIcon />}
               text="问题反馈"
               onClick={() => {
-                showToast("请联系邮箱：aaron.zhu@cti-cert.com");
+                // showToast("请联系开发部朱云翔 邮箱:aaron.zhu@cti-cert.com");
+                setShowReportModal(true);
               }}
             />
           </div>
@@ -249,6 +259,47 @@ export function SideBar(props: { className?: string }) {
       >
         <DragIcon />
       </div>
+      {showReportModal && (
+        <ReportModal onClose={() => setShowReportModal(false)} />
+      )}
+    </div>
+  );
+}
+
+function ReportModal(props: { onClose?: () => void }) {
+  return (
+    <div className="modal-mask">
+      <Modal
+        title="问题反馈"
+        onClose={() => props.onClose?.()}
+        actions={[
+          <IconButton
+            key="close"
+            onClick={props.onClose}
+            icon={<CloseIcon />}
+            bordered
+            text={Locale.UI.Close}
+          />,
+        ]}
+      >
+        <List>
+          <ListItem title="信息资源管理部" subTitle="朱云翔"></ListItem>
+          <ListItem title="Email" subTitle="aaron.zhu@cti-cert.com"></ListItem>
+          <ListItem title="请提交你的问题和建议">
+            <div style={{ display: "flex" }}>
+              <IconButton
+                icon={<AddIcon />}
+                text="问题反馈"
+                onClick={() => {
+                  window.open(
+                    "https://doc.weixin.qq.com/forms/ABUAOAfTAAgAbkAwAaWACcjXFvtMRvSyf",
+                  );
+                }}
+              />
+            </div>
+          </ListItem>
+        </List>
+      </Modal>
     </div>
   );
 }

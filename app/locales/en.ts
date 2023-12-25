@@ -11,6 +11,8 @@ const en: LocaleType = {
     Unauthorized: isApp
       ? "Invalid API Key, please check it in [Settings](/#/settings) page."
       : "Unauthorized access, please enter access code in [auth](/#/auth) page, or enter your OpenAI API Key.",
+    ContentFiltered:
+      "The response was filtered due to the prompt triggering Azure OpenAI's content management policy. Please modify your prompt and retry. To learn more about our content filtering policies please read our documentation: https://go.microsoft.com/fwlink/?linkid=2198766",
   },
   Auth: {
     Title: "Need Access Code",

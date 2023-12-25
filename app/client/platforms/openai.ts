@@ -365,7 +365,9 @@ export class ChatGPTApi implements LLMApi {
               //   const resJson = await res.clone().json();
               //   extraInfo = prettyObject(resJson);
               // } catch { }
-
+              if (res.status === 400) {
+                responseTexts.push(Locale.Error.ContentFiltered);
+              }
               if (res.status === 401) {
                 responseTexts.push(Locale.Error.Unauthorized);
               }
