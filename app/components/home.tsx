@@ -29,6 +29,7 @@ import { AuthPage } from "./auth";
 import { getClientConfig } from "../config/client";
 import { api } from "../client/api";
 import { useAccessStore } from "../store";
+import * as ww from "@wecom/jssdk";
 
 export function Loading(props: { noLogo?: boolean }) {
   return (
@@ -132,7 +133,8 @@ function Screen() {
   const isHome = location.pathname === Path.Home;
   const isAuth = location.pathname === Path.Auth;
   const isMobileScreen = useMobileScreen();
-  const shouldTightBorder = getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
+  const shouldTightBorder =
+    getClientConfig()?.isApp || (config.tightBorder && !isMobileScreen);
 
   useEffect(() => {
     loadAsyncGoogleFont();
@@ -183,11 +185,41 @@ export function useLoadData() {
   }, []);
 }
 
+function useCreateWWLogin() {
+  useEffect(() => {
+    console.log(ww.SDK_VERSION);
+    // 初始化
+    const wwLogin = ww.createWWLoginPanel({
+      el: "#ww_login",
+      params: {
+        login_type: ww.WWLoginType.corpApp,
+        appid: "ww31f12b15e58c1b05",
+        agentid: "1000136",
+        redirect_uri: "https://aiservice.cticert.com:8443",
+        state: "loginState",
+        redirect_type: ww.WWLoginRedirectType.callback,
+      },
+      onCheckWeComLogin({ isWeComLogin }) {
+        console.log(isWeComLogin);
+      },
+      onLoginSuccess({ code }) {
+        console.log({ code });
+      },
+      onLoginFail(err) {
+        console.log(err);
+      },
+    });
+
+    // 卸载
+    wwLogin.unmount();
+  }, []);
+}
+
 export function Home() {
   useSwitchTheme();
   useLoadData();
   useHtmlLang();
-
+  useCreateWWLogin();
   useEffect(() => {
     console.log("[Config] got config from build time", getClientConfig());
     useAccessStore.getState().fetch();
