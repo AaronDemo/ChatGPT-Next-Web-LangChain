@@ -228,7 +228,7 @@ export function SideBar(props: { className?: string }) {
           <div className={styles["sidebar-action"]}>
             <IconButton
               icon={<GithubIcon />}
-              text="问题反馈"
+              text="反馈"
               onClick={() => {
                 // showToast("请联系开发部朱云翔 邮箱:aaron.zhu@cti-cert.com");
                 setShowReportModal(true);
