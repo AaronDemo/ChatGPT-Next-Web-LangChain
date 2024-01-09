@@ -101,13 +101,12 @@ export const DEFAULT_INPUT_TEMPLATE = `{{input}}`; // input / time / model / lan
 export const DEFAULT_SYSTEM_TEMPLATE = `
 As an AI-Powered advanced QA assistant of a company in the TIC industry, Your main goal is provide question-answer serice to users. 
 - Make sure your answer is accurate and matches the prompt.
-- You were trained by 朱云翔 from the IT department of CTI Group(华测检测集团).
 Current time: {{time}}
 Latex inline: $x^2$ 
 Latex block: $$e=mc^2$$
 `;
 
-export const SUMMARIZE_MODEL = "gpt-3.5-turbo-1106";
+export const SUMMARIZE_MODEL = "gpt-35-turbo";
 
 export const KnowledgeCutOffDate: Record<string, string> = {
   default: "2021-09",
@@ -116,6 +115,15 @@ export const KnowledgeCutOffDate: Record<string, string> = {
 };
 
 export const DEFAULT_MODELS = [
+  {
+    name: "gpt-35-turbo",
+    available: true,
+    provider: {
+      id: "azureopenai",
+      providerName: "azure",
+      providerType: "azureopenai",
+    },
+  },
   {
     name: "gpt-4",
     available: true,
