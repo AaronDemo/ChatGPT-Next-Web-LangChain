@@ -228,9 +228,8 @@ export function SideBar(props: { className?: string }) {
           <div className={styles["sidebar-action"]}>
             <IconButton
               icon={<GithubIcon />}
-              text="反馈"
+              text={Locale.Home.Feedback}
               onClick={() => {
-                // showToast("请联系开发部朱云翔 邮箱:aaron.zhu@cti-cert.com");
                 setShowReportModal(true);
               }}
             />
@@ -270,7 +269,7 @@ function ReportModal(props: { onClose?: () => void }) {
   return (
     <div className="modal-mask">
       <Modal
-        title="问题反馈"
+        title={Locale.Home.Feedback}
         onClose={() => props.onClose?.()}
         actions={[
           <IconButton
