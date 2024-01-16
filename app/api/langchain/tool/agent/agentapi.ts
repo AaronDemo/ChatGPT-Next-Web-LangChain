@@ -186,7 +186,6 @@ export class AgentApi {
       baseUrl = reqBaseUrl;
     if (!baseUrl.endsWith("/v1"))
       baseUrl = baseUrl.endsWith("/") ? `${baseUrl}v1` : `${baseUrl}/v1`;
-    console.log("[baseUrl]", baseUrl);
     return baseUrl;
   }
 
@@ -206,7 +205,7 @@ export class AgentApi {
       const token = authToken.trim().replaceAll("Bearer ", "").trim();
 
       let apiKey = await this.getOpenAIApiKey(token);
-      if (isAzure) apiKey = token;
+      // if (isAzure) apiKey = token;
       let baseUrl = "https://api.openai.com/v1";
       if (serverConfig.baseUrl) baseUrl = serverConfig.baseUrl;
       if (
@@ -217,22 +216,6 @@ export class AgentApi {
       }
       if (!isAzure && !baseUrl.endsWith("/v1")) {
         baseUrl = baseUrl.endsWith("/") ? `${baseUrl}v1` : `${baseUrl}/v1`;
-      }
-      if (!reqBody.isAzure && serverConfig.isAzure) {
-        baseUrl = serverConfig.azureUrl || baseUrl;
-        let path = "chat/completions";
-        if (!serverConfig.azureApiVersion) {
-          return NextResponse.json({
-            error: true,
-            message: `missing AZURE_API_VERSION in server env vars`,
-          });
-        }
-        path = makeAzurePath(path, serverConfig.azureApiVersion);
-        if (serverConfig.isAzure) {
-          baseUrl = `${baseUrl}/${reqBody.model}`;
-        }
-        const fetchUrl = `${baseUrl}/${path}`;
-        reqBody.baseUrl = fetchUrl;
       }
       console.log("[baseUrl]", baseUrl);
 
@@ -343,12 +326,10 @@ export class AgentApi {
           topP: reqBody.top_p,
           presencePenalty: reqBody.presence_penalty,
           frequencyPenalty: reqBody.frequency_penalty,
-          azureOpenAIApiKey: apiKey,
-          azureOpenAIApiVersion: reqBody.isAzure
-            ? reqBody.azureApiVersion
-            : serverConfig.azureApiVersion,
-          azureOpenAIApiDeploymentName: reqBody.model,
-          azureOpenAIBasePath: baseUrl,
+          azureOpenAIApiKey: serverConfig.azureApiKey,
+          azureOpenAIApiVersion: serverConfig.azureApiVersion,
+          azureOpenAIApiDeploymentName: serverConfig.azureDeployementId,
+          azureOpenAIBasePath: serverConfig.azureUrl,
         });
       }
       const memory = new BufferMemory({

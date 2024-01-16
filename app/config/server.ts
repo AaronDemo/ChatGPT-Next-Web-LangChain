@@ -26,6 +26,7 @@ declare global {
       AZURE_URL?: string; // https://{azure-url}/openai/deployments
       AZURE_API_KEY?: string;
       AZURE_API_VERSION?: string;
+      AZURE_API_DEPLOYMENT_NAME?: string;
 
       // google only
       GOOGLE_API_KEY?: string;
@@ -71,9 +72,9 @@ export const getServerSideConfig = () => {
   const apiKeys = apiKeyEnvVar.split(",").map((v) => v.trim());
   const randomIndex = Math.floor(Math.random() * apiKeys.length);
   const apiKey = apiKeys[randomIndex];
-  console.log(
-    `[Server Config] using ${randomIndex + 1} of ${apiKeys.length} api key`,
-  );
+  // console.log(
+  //   `[Server Config] using ${randomIndex + 1} of ${apiKeys.length} api key`,
+  // );
 
   return {
     baseUrl: process.env.BASE_URL,
@@ -84,6 +85,7 @@ export const getServerSideConfig = () => {
     azureUrl: process.env.AZURE_URL,
     azureApiKey: process.env.AZURE_API_KEY,
     azureApiVersion: process.env.AZURE_API_VERSION,
+    azureDeployementId: process.env.AZURE_API_DEPLOYMENT_NAME,
 
     isGoogle,
     googleApiKey: process.env.GOOGLE_API_KEY,

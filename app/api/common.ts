@@ -68,7 +68,7 @@ export async function requestOpenai(req: NextRequest) {
   const clonedBody = await req.text();
   const jsonBody = JSON.parse(clonedBody) as { model?: string };
   if (serverConfig.isAzure) {
-    baseUrl = `${baseUrl}/${jsonBody.model}`;
+    baseUrl = `${baseUrl}/${serverConfig.azureDeployementId}`;
   }
   const fetchUrl = `${baseUrl}/${path}`;
   const fetchOptions: RequestInit = {
