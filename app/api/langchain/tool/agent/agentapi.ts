@@ -28,6 +28,7 @@ import {
 } from "langchain/agents/openai/output_parser";
 import { RunnableSequence } from "langchain/schema/runnable";
 import { ChatPromptTemplate, MessagesPlaceholder } from "langchain/prompts";
+import { makeAzurePath } from "@/app/azure";
 
 export interface RequestMessage {
   role: string;
@@ -219,6 +220,19 @@ export class AgentApi {
       }
       if (!reqBody.isAzure && serverConfig.isAzure) {
         baseUrl = serverConfig.azureUrl || baseUrl;
+        let path = "chat/completions";
+        if (!serverConfig.azureApiVersion) {
+          return NextResponse.json({
+            error: true,
+            message: `missing AZURE_API_VERSION in server env vars`,
+          });
+        }
+        path = makeAzurePath(path, serverConfig.azureApiVersion);
+        if (serverConfig.isAzure) {
+          baseUrl = `${baseUrl}/${reqBody.model}`;
+        }
+        const fetchUrl = `${baseUrl}/${path}`;
+        reqBody.baseUrl = fetchUrl;
       }
       console.log("[baseUrl]", baseUrl);
 
