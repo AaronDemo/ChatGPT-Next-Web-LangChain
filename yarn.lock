@@ -2945,6 +2945,11 @@
     "@webassemblyjs/ast" "1.11.6"
     "@xtuc/long" "4.2.2"
 
+"@wecom/jssdk@^1.4.5":
+  version "1.4.5"
+  resolved "https://registry.yarnpkg.com/@wecom/jssdk/-/jssdk-1.4.5.tgz#7d8f3670feb1ad82e283d92ee8462b763983f1fc"
+  integrity sha512-1SSmcDUid7QOQNNFaM4d884NXJQYuoO+oLZtM9TRO5uMXYj2s69hmuAoPUr3D3br6VDgv4H+tbIG5A5A+uB9lA==
+
 "@xtuc/ieee754@^1.2.0":
   version "1.2.0"
   resolved "https://registry.npmmirror.com/@xtuc/ieee754/-/ieee754-1.2.0.tgz#eef014a3145ae477a1cbc00cd1e552336dceb790"
