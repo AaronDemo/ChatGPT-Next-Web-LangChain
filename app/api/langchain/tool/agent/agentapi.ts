@@ -217,6 +217,10 @@ export class AgentApi {
       if (!isAzure && !baseUrl.endsWith("/v1")) {
         baseUrl = baseUrl.endsWith("/") ? `${baseUrl}v1` : `${baseUrl}/v1`;
       }
+      if (isAzure) {
+        baseUrl = serverConfig.azureUrl || "";
+      }
+
       console.log("[baseUrl]", baseUrl);
 
       var handler = await this.getHandler(reqBody);
